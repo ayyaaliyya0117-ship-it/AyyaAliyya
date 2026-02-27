@@ -7,26 +7,28 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller 
 {
-    public function create()
-    {
-    return view('siswa.create');
-    }
     public function index() 
     {
         $siswa = siswa::all();
         return view('siswa.index', compact('siswa'));
     }
 
-    public function store(Request $request) {
+    public function create()
+    {
+        return view('siswa.create');
+    }
+
+    public function store(Request $request) 
+    {
         $request->validate([
-            'nama' => 'required',
-            'umur' => 'required|integer',
+            'nama'  => 'required',
+            'umur'  => 'required|integer',
             'nilai' => 'required|numeric',
-    ]);
+        ]);
 
-        \App\Models\siswa::create($request->all());
+        siswa::create($request->all());
 
-        return redirect()->route('siswa.index');
+        return redirect()->route('siswa.index')->with('success', 'Data berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -38,20 +40,20 @@ class SiswaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required',
-            'umur' => 'required|integer',
+            'nama'  => 'required',
+            'umur'  => 'required|integer',
             'nilai' => 'required|numeric',
         ]);
 
         $siswa = siswa::findOrFail($id);
         $siswa->update($request->all());
 
-        return redirect()->route('siswa.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('siswa.index')->with('success', 'Data berhasil diperbarui');
     }
 
     public function destroy($id) 
     {
         siswa::findOrFail($id)->delete();
-        return redirect()->route('siswa.index');
+        return redirect()->route('siswa.index')->with('success', 'Data berhasil dihapus');
     }
 }
